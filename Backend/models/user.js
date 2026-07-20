@@ -9,8 +9,13 @@ exports.createUser = async (userData) => {
     return result.insertId;
 }
 
-exports.findAllUsers = async () => {
-    const [rows] = await db.query('SELECT id, full_name, email, created_at FROM users');
+exports.findUserByEmail = async (userData) => {
+    const { email, password } = userData;
+
+    const [rows] = await db.query(
+        "SELECT * FROM users WHERE email = ?",
+        [email]
+    );
     return rows[0];
-}
+};
 
