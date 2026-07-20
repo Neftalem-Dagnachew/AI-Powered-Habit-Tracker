@@ -1,19 +1,20 @@
 require('dotenv').config();
 const express = require('express');
-const db = require('./config/db')
+const db = require('./config/db');
 const cors = require('cors');
 
+const authRouter = require('./routes/authRouter');
 const { notFound, errorHandler } = require('./middleware/errorHandler');
 
 const app = express();
 
-// Middlewares
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// API Routes
+app.use('/api/auth', authRouter);
 
-// Error Handling Middlewares
 app.use(notFound);
 app.use(errorHandler);
 
