@@ -36,7 +36,7 @@ exports.registerUser = async (req, res, next) => {
 
         const token = generateToken(userId);
 
-        res.status(200).json({
+        res.status(201).json({
             success: true,
             message: "User successfully registered",
             token,
