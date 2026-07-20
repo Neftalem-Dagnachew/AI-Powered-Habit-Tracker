@@ -2,7 +2,7 @@ const bcrypt = require('bcrypt');
 const User = require('../models/user');
 const jwt = require('jsonwebtoken')
 
-exports.generateToken = (id) => {
+const generateToken = (id) => {
     return jwt.sign(
         { id }, 
         process.env.JWT_SECRET, 
@@ -72,7 +72,7 @@ exports.login = async (req, res, next) => {
             throw new Error("Invalid email or password");
         }
 
-        const token = this.generateToken(user.id);
+        const token = generateToken(user.id);
 
         res.status(200).json({
             success: true,
