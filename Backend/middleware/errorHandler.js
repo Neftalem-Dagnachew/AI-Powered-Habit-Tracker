@@ -15,7 +15,6 @@ exports.errorHandler = (err, req, res, next) => {
     message = "Internal Server Error";
   }
 
-  // 4. Response መላክ
   res.status(statusCode).json({
     success: false,
     message: message,

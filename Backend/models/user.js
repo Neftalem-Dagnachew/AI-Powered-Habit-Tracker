@@ -10,7 +10,7 @@ exports.createUser = async (userData) => {
 }
 
 exports.findAllUsers = async () => {
-    const [rows] = db.query('SELECT id, full_name, email, created_at FROM users');
-    return rows;
+    const [rows] = await db.query('SELECT id, full_name, email, created_at FROM users');
+    return rows[0];
 }
 
