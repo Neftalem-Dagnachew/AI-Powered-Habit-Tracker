@@ -9,9 +9,7 @@ exports.createUser = async (userData) => {
     return result.insertId;
 }
 
-exports.findUserByEmail = async (userData) => {
-    const { email, password } = userData;
-
+exports.findUserByEmail = async (email) => {
     const [rows] = await db.query(
         "SELECT * FROM users WHERE email = ?",
         [email]
