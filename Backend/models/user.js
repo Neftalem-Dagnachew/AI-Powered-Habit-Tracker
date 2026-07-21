@@ -24,3 +24,19 @@ exports.getMe = async (userId) => {
     );
     return result[0]
 }
+
+exports.updateProfile = async (userId, userData) => {
+    const { full_name, email } = userData;
+
+    await db.query(
+        "UPDATE users SET full_name = ?, email = ? WHERE id = ?",
+        [full_name, email, userId]
+    );
+
+    const [row] = await db.query(
+        "SELECT id, full_name, email FROM users WHERE id = ?",
+        [userId]
+    );
+
+    return row[0]
+}
