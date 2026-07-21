@@ -17,7 +17,7 @@ exports.findUserByEmail = async (email) => {
     return rows[0];
 };
 
-exports.getMe = async () => {
+exports.getMe = async (userId) => {
     const [result] = await db.query(
         "SELECT id, full_name, email FROM users WHERE id = ?",
         [userId]
