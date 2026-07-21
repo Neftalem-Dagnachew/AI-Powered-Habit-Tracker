@@ -88,3 +88,22 @@ exports.login = async (req, res, next) => {
         next(error);
     }
 }
+
+exports.getMe = async (req, res, next) => {
+    try {
+        const user = await User.getMe(req.user.id);
+
+        if (!user) {
+            res.status(404)
+            throw new Error("User Not Found")
+        }
+
+        res.status(200).json({
+            success: true,
+            user
+        })
+
+    } catch(error) {
+        next(error);
+    }
+}
