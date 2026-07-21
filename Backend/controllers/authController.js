@@ -107,3 +107,32 @@ exports.getMe = async (req, res, next) => {
         next(error);
     }
 }
+
+exports.updateProfile = async (req, res, next) => {
+    try {
+        const user = await User.updateProfile(req.user.id);
+        const { full_name, email } = req.body;
+
+        if(!full_name || !email) {
+            res.status(400)
+            throw new Error("All Data Required")
+        }
+
+        const existingUser = await User.findUserByEmail(email);
+        if(existingUser && existingUser.id !== userId) {
+            res.status(400)
+            throw new Error("Email is already in use by another account");
+        }
+
+        const updatedUser = await User.updateProfile(userId, { full_name, email });
+
+        res.status(200).json({
+            success: true,
+            message: "Profile updated successfully",
+            user: updatedUser
+        })
+
+    } catch(error) {
+        next(error)
+    }
+}
