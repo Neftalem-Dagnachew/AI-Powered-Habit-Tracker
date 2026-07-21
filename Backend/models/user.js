@@ -33,10 +33,10 @@ exports.updateProfile = async (userId, userData) => {
         [full_name, email, userId]
     );
 
-    const [row] = await db.query(
+    const [rows] = await db.query(
         "SELECT id, full_name, email FROM users WHERE id = ?",
         [userId]
     );
 
-    return row[0]
+    return rows[0];
 }

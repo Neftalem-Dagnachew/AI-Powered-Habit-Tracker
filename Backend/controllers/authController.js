@@ -110,8 +110,8 @@ exports.getMe = async (req, res, next) => {
 
 exports.updateProfile = async (req, res, next) => {
     try {
-        const user = await User.updateProfile(req.user.id);
         const { full_name, email } = req.body;
+        const userId = req.user.id;
 
         if(!full_name || !email) {
             res.status(400)
