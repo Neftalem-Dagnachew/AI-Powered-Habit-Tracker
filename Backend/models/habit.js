@@ -51,4 +51,12 @@ exports.createHabit = async (userId, habitData) => {
     return rows[0];
 };
 
+exports.getUserHabits = async (userId) => {
+    const [rows] = await db.query(
+        "SELECT id, habit_name, description, category, frequency, target_days, icon, color, created_at FROM habits WHERE user_id = ? ORDER BY created_at DESC",
+        [userId]
+    );
+    return rows;
+};
+
 exports.ALLOWED_CATEGORIES = ALLOWED_CATEGORIES;
