@@ -30,3 +30,14 @@ exports.implimentHabit = async (req, res, next) => {
         next(error)
     }
 }
+
+exports.getCategories = async (req, res, next) => {
+    try {
+        res.status(200).json({
+            success: true,
+            categories: Habit.ALLOWED_CATEGORIES
+        });
+    } catch (error) {
+        next(error);
+    }
+};
