@@ -85,3 +85,26 @@ exports.updateHabit = async (req, res, next) => {
         next(error)
     }
 }
+
+exports.deleteHabit = async (req, res, next) => {
+
+    try {
+        const userId = req.user.id;
+        const habitId = req.params.id;
+
+        if(!habitId) {
+            res.status(400)
+            throw new Error("Habit ID is required");
+        }
+
+        const deleteHabit = await Habit.deleteHabits(habitId, userId, req.body);
+
+        res.status(200).json({
+            success: true,
+            message: "Habit delete successfully",
+            habit: deleteHabit
+        });
+    } catch(error) {
+        next(error);
+    }
+}

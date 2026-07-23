@@ -118,8 +118,8 @@ exports.updateHabits = async (habitId, userId, updateData) => {
 exports.deleteHabits = async (habitId, userId, deletedata) => {
 
     const [deleteRows] = await db.query(
-        "DELETE FROM habits WHERE id = ?",
-        [habitId]
+        "DELETE FROM habits WHERE id = ? AND user_id = ?",
+        [habitId, userId]
     )
 
     return deleteRows;
