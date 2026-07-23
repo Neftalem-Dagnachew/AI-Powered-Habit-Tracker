@@ -60,18 +60,31 @@ exports.getUserHabits = async (userId) => {
 };
 
 exports.updateHabits = async (habitId, userId, updateData) => {
-    
-    const { 
-        habit_name,
-        description,
-        category, 
-        frequency,
-        target_days,
-        icon,
-        color
-    } = updateData;
 
-    const [resalt] = await db.query(
+    const [existingRows] = await db.query(
+        "SELECT * FROM habits WHERE id = ? AND user_id = ?",
+        [habitId, userId]
+    );
+
+    if (existingRows.length === 0) {
+        throw new Error("Habit not found or user not authorized");
+    }
+
+    const currentHabit = existingRows[0];
+
+    const habit_name = updateData.habit_name !== undefined ? updateData.habit_name : currentHabit.habit_name;
+    const description = updateData.description !== undefined ? updateData.description : currentHabit.description;
+    const category = updateData.category !== undefined ? updateData.category : currentHabit.category;
+    const frequency = updateData.frequency !== undefined ? updateData.frequency : currentHabit.frequency;
+    const target_days = updateData.target_days !== undefined ? updateData.target_days : currentHabit.target_days;
+    const icon = updateData.icon !== undefined ? updateData.icon : currentHabit.icon;
+    const color = updateData.color !== undefined ? updateData.color : currentHabit.color;
+
+    if (updateData.category && !ALLOWED_CATEGORIES.includes(updateData.category)) {
+        throw new Error(`Invalid category! Allowed categories are: ${ALLOWED_CATEGORIES.join(', ')}`);
+    }
+
+    await db.query(
         `UPDATE habits SET 
             habit_name = ?, 
             description = ?, 
@@ -80,24 +93,19 @@ exports.updateHabits = async (habitId, userId, updateData) => {
             target_days = ?,
             icon = ?, 
             color = ? 
-            WHERE id = ? AND user_id = ?
-        `,
+        WHERE id = ? AND user_id = ?`,
         [
             habit_name, 
-            description || null,
-            category || 'Other',
-            frequency || 'daily',
-            target_days || 1,
-            icon || 'default-icon',
-            color || '#000000',
+            description,
+            category,
+            frequency,
+            target_days,
+            icon,
+            color,
             habitId,
             userId
         ]
     );
-
-    if(resalt.affectedRows == 0) {
-        throw new Error("Habit not found or user not authorized")
-    }
 
     const [updatedRows] = await db.query(
         "SELECT id, user_id, habit_name, description, category, frequency, target_days, icon, color, created_at FROM habits WHERE id = ?",

@@ -68,10 +68,10 @@ exports.updateHabit = async (req, res, next) => {
         const userId = req.user.id;
         const habitId = req.params.id;
 
-        if(!userId || !habitId) {
-            res.status(400)
-            throw new Error("User not found");
-        };
+        if (!habitId) {
+            res.status(400);
+            throw new Error("Habit ID is required");
+        }
 
         const updatedHabit = await Habit.updateHabits(habitId, userId, req.body);
 
