@@ -62,3 +62,26 @@ exports.getCategories = async (req, res, next) => {
         next(error);
     }
 };
+
+exports.updateHabit = async (req, res, next) => {
+    try {
+        const userId = req.user.id;
+        const habitId = req.params.id;
+
+        if(!userId || !habitId) {
+            res.status(400)
+            throw new Error("User not found");
+        };
+
+        const updatedHabit = await Habit.updateHabits(habitId, userId, req.body);
+
+        res.status(200).json({
+            success: true,
+            message: "Habit updated successfully",
+            habit: updatedHabit
+        });
+
+    } catch(error) {
+        next(error)
+    }
+}
