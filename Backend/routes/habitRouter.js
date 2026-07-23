@@ -7,7 +7,6 @@ router.use(protect);
 
 router.get('/categories', getCategories);
 
-router.route('/')
-    .post(createHabit)
+router.post('/', implimentHabit);
 
 module.exports = router;

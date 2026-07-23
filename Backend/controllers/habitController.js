@@ -5,13 +5,13 @@ exports.implimentHabit = async (req, res, next) => {
         const { habit_name, description, category, frequency, target_days, icon, color } = req.body;
         const userId = req.user.id;
 
-        if(!habit_name || habit_name.trime() === '') {
+        if(!habit_name || habit_name.trim() === '') {
             res.status(400);
             throw new Error("Habit name is required");
         }
 
         const newHabit = await Habit.createHabit(userId, {
-            habit_name: habit_name.trime(),
+            habit_name: habit_name.trim(),
             description,
             category,
             frequency,
