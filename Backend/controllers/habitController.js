@@ -31,6 +31,27 @@ exports.implimentHabit = async (req, res, next) => {
     }
 }
 
+exports.UserHabits = async (req, res, next) => {
+    try {
+        const userId = req.user.id;
+
+        if(!userId) {
+            res.status(404);
+            throw new Error("User Not Found");
+        }
+
+        const habits = await Habit.getUserHabits(userId);
+
+        res.status(200).json({
+            success: true,
+            count: habits.length,
+            habits
+        })
+    } catch(error) {
+        next(error)
+    }
+}
+
 exports.getCategories = async (req, res, next) => {
     try {
         res.status(200).json({
