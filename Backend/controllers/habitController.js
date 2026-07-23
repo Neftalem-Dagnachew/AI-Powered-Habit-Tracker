@@ -1,0 +1,32 @@
+const Habit = require('../models/habit');
+
+exports.implimentHabit = async (req, res, next) => {
+    try {
+        const { habit_name, description, category, frequency, target_days, icon, color } = req.body;
+        const userId = req.user.id;
+
+        if(!habit_name || habit_name.trime() === '') {
+            res.status(400);
+            throw new Error("Habit name is required");
+        }
+
+        const newHabit = await Habit.createHabit(userId, {
+            habit_name: habit_name.trime(),
+            description,
+            category,
+            frequency,
+            target_days,
+            icon,
+            color
+        });
+
+        res.status(201).json({
+            success: true,
+            message: "Habit created successfully",
+            habit: newHabit
+        });
+
+    } catch(error) {
+        next(error)
+    }
+}
