@@ -115,4 +115,14 @@ exports.updateHabits = async (habitId, userId, updateData) => {
     return updatedRows[0];
 };
 
+exports.deleteHabits = async (habitId, userId, deletedata) => {
+
+    const [deleteRows] = await db.query(
+        "DELETE FROM habits WHERE id = ?",
+        [habitId]
+    )
+
+    return deleteRows;
+}
+
 exports.ALLOWED_CATEGORIES = ALLOWED_CATEGORIES;
