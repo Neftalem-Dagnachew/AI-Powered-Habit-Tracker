@@ -59,4 +59,33 @@ exports.getUserHabits = async (userId) => {
     return rows;
 };
 
+exports.updateHabits = async (userId, updateData) => {
+    const { 
+        habit_name,
+        description,
+        category, 
+        frequency,
+        target_days,
+        icon,
+        color
+    } = updateData;
+
+    const [resalt] = await db.query(
+        `UPDATE 
+            habits SET 
+            habit_name = ?, 
+            description = ?, 
+            category = ?, 
+            frequency = ?, 
+            target_days = ?  
+            icon = ?, 
+            color = ? 
+            WHERE id = ?
+        `,
+        [habit_name, description, category, frequency, target_days, icon, color, userId]
+    )
+
+    return resalt;
+}
+
 exports.ALLOWED_CATEGORIES = ALLOWED_CATEGORIES;
