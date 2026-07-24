@@ -18,8 +18,8 @@ exports.createHabitLog = async (habitId, userId, habitLogData = {}) => {
     }
 
     const [result] = await db.query(
-        "INSERT INTO habit_logs (habit_id, user_id, log_date, status) VALUES (?, ?, ?, ?)",
-        [habitId, userId, log_date, status]
+        "INSERT INTO habit_logs (habit_id, log_date, status) VALUES (?, ?, ?)",
+        [habitId, log_date, status]
     );
 
     const [newLog] = await db.query(
