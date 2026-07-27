@@ -16,3 +16,19 @@ exports.createLog = async (req, res, next) => {
         next(error);
     }
 };
+
+exports.get_Log = async (req, res, next) => {
+    try {
+        const habitId = req.params.id;
+        const userId = req.user.id;
+
+        const newHabit_log = await Habit_logs.getHabit_log(habitId, userId, req.body);
+
+        res.status(200).json({
+            success: true,
+            log: newHabit_log 
+        })
+    } catch (error) {
+        next(error)
+    }
+}
