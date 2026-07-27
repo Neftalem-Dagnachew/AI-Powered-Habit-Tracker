@@ -32,3 +32,25 @@ exports.get_Log = async (req, res, next) => {
         next(error)
     }
 }
+
+exports.getAnalytics = async (req, res, next) => {
+    try {
+        const habitId = req.params.id;
+        const userId = req.user.id;
+
+        const analyticsData = await Habit_logs.getAnalytics(habitId, userId);
+
+        res.status(200).json({
+            success: true,
+            data: analyticsData
+        });
+    } catch (error) {
+        if (error.message === "HABIT_NOT_FOUND") {
+            return res.status(404).json({
+                success: false,
+                message: "Habit not found or user unauthorized"
+            });
+        }
+        next(error);
+    }
+};
