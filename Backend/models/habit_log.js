@@ -29,3 +29,12 @@ exports.createHabitLog = async (habitId, userId, habitLogData = {}) => {
 
     return newLog[0];
 };
+
+exports.getHabit_log = async (habitId, userId) => {
+    const [resalt] = await db.query(
+        "SELECT * FROM habit_logs WHERE id = ?",
+        [userId]
+    );
+
+    return resalt[0];
+}
