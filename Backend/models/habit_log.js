@@ -84,5 +84,15 @@ exports.getAnalytics = async (habitId, useId) => {
 
     const [streakResult] = await db.query(streakQuery, [habitId]);
 
+    const [statsResult] = await db.query(`
+        SELECT
+            COUNT(hl.id) AS completed_days,
+            GREATEST(DATEDIFF(CURDATE(), h.created_at) + 1, 1) AS elapsed_days
+        FROM habits h
+        LEFT JOIN habit_logs hl ON h.id = hl.habit_id AND hl.status = 'completed'
+        WHERE h.id = ?
+        GROUP BY h.id;
+    `, [habitId]);
+
     
 }
