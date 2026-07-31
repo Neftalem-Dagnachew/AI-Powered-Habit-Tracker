@@ -1,7 +1,7 @@
 const axios = require('axios');
 
 const OPENROUTER_API_URL = process.env.OPENROUTER_API_URL || 'https://openrouter.ai/api/v1/chat/completions';
-const MODEL_NAME = process.env.MODEL_NAME || 'google/gemini-2.0-flash-lite-preview-02-05:free';
+const MODEL_NAME = process.env.MODEL_NAME || 'openrouter/free';
 
 const BILINGUAL_INSTRUCTION = "Respond in English by default. However, if the user input or query is in Amharic, respond seamlessly in Amharic.";
 

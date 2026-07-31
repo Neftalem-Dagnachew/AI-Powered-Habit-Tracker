@@ -4,31 +4,37 @@ exports.getUserHabitsSummary = async (userId) => {
     const query = `
         SELECT 
             h.id,
-            h.title,
+            h.habit_name AS title,
+            h.category,
             h.frequency,
             h.target_days,
-            COUNT(hl.id) AS total_completed_days,
-            GREATEST(DATEDIFF(CURDATE(), h.created_at) + 1, 1) AS total_elapsed_days,
-            SUM(CASE WHEN hl.log_date >= CURDATE() - INTERVAL 7 DAY THEN 1 ELSE 0 END) AS completed_last_7_days
+            COUNT(CASE WHEN l.status = 'completed' THEN 1 END) AS total_completed_logs
         FROM habits h
-        LEFT JOIN habit_logs hl ON h.id = hl.habit_id AND hl.status = 'completed'
+        LEFT JOIN habit_logs l ON h.id = l.habit_id
         WHERE h.user_id = ?
-        GROUP BY h.id;
+        GROUP BY h.id, h.habit_name, h.category, h.frequency, h.target_days;
     `;
-    const [rows] = await db.query(query, [userId]);
+
+    const [rows] = await db.execute(query, [userId]);
     return rows;
 };
 
 exports.getBrokenHabitDetails = async (habitId, userId) => {
     const query = `
-        SELECT h.id, h.title, h.frequency, h.target_days,
-               DATEDIFF(CURDATE(), MAX(hl.log_date)) AS days_since_last_log
+        SELECT 
+            h.id,
+            h.habit_name AS title,
+            DATEDIFF(
+                CURDATE(), 
+                COALESCE(MAX(CASE WHEN l.status = 'completed' THEN l.log_date END), h.created_at)
+            ) AS days_missed
         FROM habits h
-        LEFT JOIN habit_logs hl ON h.id = hl.habit_id AND hl.status = 'completed'
+        LEFT JOIN habit_logs l ON h.id = l.habit_id
         WHERE h.id = ? AND h.user_id = ?
-        GROUP BY h.id;
+        GROUP BY h.id, h.habit_name, h.created_at;
     `;
-    const [rows] = await db.query(query, [habitId, userId]);
+
+    const [rows] = await db.execute(query, [habitId, userId]);
     return rows[0] || null;
 };
 

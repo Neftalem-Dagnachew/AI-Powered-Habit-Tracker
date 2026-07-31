@@ -39,7 +39,7 @@ exports.getStreakRecovery = async (req, res, next) => {
 
         const recoveryPlan = await aiService.generateStreakRecovery(
             habitDetails.title,
-            habitDetails.days_since_last_log || 1
+            habitDetails.days_missed || 1
         );
 
         res.status(200).json({ success: true, recovery_plan: recoveryPlan });
@@ -54,7 +54,7 @@ exports.handleHabitChat = async (req, res, next) => {
         const { question } = req.body;
 
         if (!question) {
-            return res.status(400).json({ success: false, message: "Request not sent" });
+            return res.status(400).json({ success: false, message: "Please provide a question." });
         }
 
         const habitsSummary = await aiModel.getUserHabitsSummary(userId);
@@ -69,16 +69,15 @@ exports.handleHabitChat = async (req, res, next) => {
 exports.getMorningMotivation = async (req, res, next) => {
     try {
         const userId = req.user.id;
-        const userName = req.user.name || "my darling";
+        const userName = req.user.name || req.user.username || "Friend";
 
-        // ሀ) Check Cache
         const cachedMotivation = await aiModel.getCachedMotivation(userId);
         if (cachedMotivation) {
             return res.status(200).json({ success: true, motivation: cachedMotivation, cached: true });
         }
 
         const habitsSummary = await aiModel.getUserHabitsSummary(userId);
-        const activeStreaksCount = habitsSummary.filter(h => h.completed_last_7_days > 0).length;
+        const activeStreaksCount = habitsSummary.filter(h => h.total_completed_logs > 0).length;
 
         const newMotivation = await aiService.generateMorningMotivation(userName, activeStreaksCount);
 
