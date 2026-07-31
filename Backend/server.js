@@ -5,7 +5,8 @@ const cors = require('cors');
 
 const authRouter = require('./routes/authRouter');
 const habitRouter = require('./routes/habitRouter');
-const habitLogRouter = require('./routes/habitLogRouter')
+const habitLogRouter = require('./routes/habitLogRouter');
+const aiRouter = require('./routes/aiRouter');
 const { notFound, errorHandler } = require('./middleware/errorHandler');
 
 const app = express();
@@ -18,6 +19,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/api/auth', authRouter);
 app.use('/api/habits', habitRouter);
 app.use('/api/habits', habitLogRouter);
+app.use('/api/ai', aiRouter);
 
 app.use(notFound);
 app.use(errorHandler);
