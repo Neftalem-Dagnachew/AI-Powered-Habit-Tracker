@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 
 import { useTheme } from "../context/ThemeContext";
+import OrbitingHabits from "../components/OrbitingHabits.jsx";
 
 const features = [
   {
@@ -100,7 +101,7 @@ export default function Landing() {
           </div>
 
           <div className="lg:col-span-4 order-1 lg:order-2 flex justify-center lg:-mr-36">
-            {/* <OrbitingHabits /> */}
+            <OrbitingHabits />
           </div>
         </div>
 
