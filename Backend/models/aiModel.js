@@ -38,26 +38,26 @@ exports.getBrokenHabitDetails = async (habitId, userId) => {
     return rows[0] || null;
 };
 
-exports.getCachedMotivation = async (userId) => {
-    const [rows] = await db.query(
-        "SELECT morning_motivation, last_motivation_date FROM users WHERE id = ?",
-        [userId]
-    );
+// exports.getCachedMotivation = async (userId) => {
+//     const [rows] = await db.query(
+//         "SELECT morning_motivation, last_motivation_date FROM users WHERE id = ?",
+//         [userId]
+//     );
     
-    if (rows.length > 0 && rows[0].last_motivation_date) {
-        const today = new Date().toISOString().split('T')[0];
-        const lastDate = new Date(rows[0].last_motivation_date).toISOString().split('T')[0];
-        if (today === lastDate) {
-            return rows[0].morning_motivation;
-        }
-    }
-    return null;
-};
+//     if (rows.length > 0 && rows[0].last_motivation_date) {
+//         const today = new Date().toISOString().split('T')[0];
+//         const lastDate = new Date(rows[0].last_motivation_date).toISOString().split('T')[0];
+//         if (today === lastDate) {
+//             return rows[0].morning_motivation;
+//         }
+//     }
+//     return null;
+// };
 
-exports.saveCachedMotivation = async (userId, motivationText) => {
-    const today = new Date().toISOString().split('T')[0];
-    await db.query(
-        "UPDATE users SET morning_motivation = ?, last_motivation_date = ? WHERE id = ?",
-        [motivationText, today, userId]
-    );
-};
+// exports.saveCachedMotivation = async (userId, motivationText) => {
+//     const today = new Date().toISOString().split('T')[0];
+//     await db.query(
+//         "UPDATE users SET morning_motivation = ?, last_motivation_date = ? WHERE id = ?",
+//         [motivationText, today, userId]
+//     );
+// };
