@@ -17,6 +17,6 @@ router.get('/weekly-report', getWeeklyReport);
 router.post('/habit-wizard', generateHabitsFromGoal);
 router.get('/streak-recovery/:habitId', getStreakRecovery);
 router.post('/chat', handleHabitChat);
-router.get('/morning-motivation', getMorningMotivation);
+// router.get('/morning-motivation', getMorningMotivation);
 
 module.exports = router;
